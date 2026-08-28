@@ -1,0 +1,13 @@
+{
+  "_comment": "Build-only inputs. The official game archive is never included in the WorldgenLib release package.",
+  "vintageStoryVersion": "1.22.7",
+  "clientArchive": {
+    "name": "vs_install_win-x64_1.22.7.exe",
+    "url": "https://cdn.vintagestory.at/gamefiles/stable/vs_install_win-x64_1.22.7.exe",
+    "extractor": {
+      "name": "innounp-2.zip",
+      "url": "https://github.com/jrathlev/InnoUnpacker-Windows-GUI/releases/download/ui_2_2_9/innounp-2.zip",
+      "executable": "innounp.exe"
+    }
+  }
+}

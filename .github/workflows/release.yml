@@ -1,0 +1,75 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build and publish release
+    if: github.repository == 'Zaldaryon/WorldgenLib'
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out the tagged commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: ga
+
+      - name: Validate release metadata
+        shell: pwsh
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: .\scripts\validate-release.ps1 -Tag $env:RELEASE_TAG
+
+      - name: Cache official Vintage Story archive
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}\worldgenlib-vs-archives
+          key: worldgenlib-vs-windows-${{ hashFiles('build-manifest.json') }}
+
+      - name: Bootstrap official Vintage Story references
+        shell: pwsh
+        run: |
+          $manifest = Get-Content -LiteralPath build-manifest.json -Raw | ConvertFrom-Json
+          $vsRoot = Join-Path $env:RUNNER_TEMP "worldgenlib-vintagestory-$($manifest.vintageStoryVersion)"
+          .\scripts\bootstrap-vintage-story.ps1 -InstallPath $vsRoot
+          "VINTAGE_STORY=$vsRoot" >> $env:GITHUB_ENV
+
+      - name: Build WorldgenLib
+        shell: pwsh
+        run: dotnet build WorldgenLib\WorldgenLib.VintageStory.csproj -c Release --nologo
+
+      - name: Run unit tests
+        shell: pwsh
+        run: dotnet test WorldgenLib.Tests\WorldgenLib.Tests.csproj -c Release --nologo
+
+      - name: Package the mod
+        id: package
+        shell: pwsh
+        run: .\scripts\package-mod.ps1 -Configuration Release -OutputDirectory dist
+
+      - name: Publish GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          $modInfo = Get-Content -LiteralPath WorldgenLib\modinfo.json -Raw | ConvertFrom-Json
+          $zip = "dist\WorldgenLib-$($modInfo.version).zip"
+          $hash = "$zip.sha256"
+          gh release create $env:RELEASE_TAG $zip $hash --verify-tag --generate-notes --title "WorldgenLib $($modInfo.version)"

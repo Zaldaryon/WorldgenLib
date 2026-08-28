@@ -1,0 +1,22 @@
+# .NET build output
+**/bin/
+**/obj/
+
+# Release artifacts
+/dist/
+
+# Local Vintage Story bootstrap files
+/.vanilla/
+/.tools/
+/.build/
+vs_install_*.exe
+*.partial
+
+# IDE files
+.vs/
+.idea/
+*.user
+*.suo
+
+# Local logs and saves
+*.log
