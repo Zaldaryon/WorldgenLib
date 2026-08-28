@@ -28,7 +28,7 @@ The build manifest pins the official Vintage Story build used to compile and tes
 
 ## API reference
 
-The generated [C# API reference](https://zaldaryon.github.io/WorldgenLib/) will be published from `main` after the source tree is available. The [WorldgenLib Wiki](https://github.com/Zaldaryon/WorldgenLib/wiki) remains the place for conceptual guides and migration notes.
+The [WorldgenLib site](https://zaldaryon.github.io/WorldgenLib/) is the public landing page. Its generated [C# API reference](https://zaldaryon.github.io/WorldgenLib/api/index.html) is built from `main` when the source tree is available. The [WorldgenLib Wiki](https://github.com/Zaldaryon/WorldgenLib/wiki) remains the place for conceptual guides and migration notes.
 
 ## Development
 

@@ -12,6 +12,7 @@ on:
       - 'docfx-filter.yml'
       - 'docfx.json'
       - 'docs/api/**'
+      - 'docs/site/**'
       - 'scripts/bootstrap-vintage-story.ps1'
   workflow_dispatch:
 
@@ -45,9 +46,8 @@ jobs:
           fi
 
   build:
-    name: Build API reference
+    name: Build Pages site
     needs: preflight
-    if: needs.preflight.outputs.source_present == 'true'
     runs-on: windows-latest
     timeout-minutes: 45
     permissions:
@@ -59,7 +59,14 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Prepare WorldgenLib landing page
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path _site | Out-Null
+          Get-ChildItem -LiteralPath docs\site -Force | Copy-Item -Destination _site -Recurse -Force
+
       - name: Set up .NET SDKs
+        if: needs.preflight.outputs.source_present == 'true'
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
@@ -67,16 +74,19 @@ jobs:
             10.0.x
 
       - name: Restore DocFX
+        if: needs.preflight.outputs.source_present == 'true'
         shell: pwsh
         run: dotnet tool restore
 
       - name: Cache official Vintage Story archive
+        if: needs.preflight.outputs.source_present == 'true'
         uses: actions/cache@v4
         with:
           path: ${{ runner.temp }}\worldgenlib-vs-archives
           key: worldgenlib-vs-windows-${{ hashFiles('build-manifest.json') }}
 
       - name: Bootstrap official Vintage Story references
+        if: needs.preflight.outputs.source_present == 'true'
         shell: pwsh
         run: |
           $manifest = Get-Content -LiteralPath build-manifest.json -Raw | ConvertFrom-Json
@@ -85,10 +95,12 @@ jobs:
           "VINTAGE_STORY=$vsRoot" >> $env:GITHUB_ENV
 
       - name: Build WorldgenLib
+        if: needs.preflight.outputs.source_present == 'true'
         shell: pwsh
         run: dotnet build WorldgenLib\WorldgenLib.VintageStory.csproj -c Release --nologo
 
       - name: Generate API site
+        if: needs.preflight.outputs.source_present == 'true'
         shell: pwsh
         env:
           DOCFX_SOURCE_REPOSITORY_URL: https://github.com/Zaldaryon/WorldgenLib
@@ -96,8 +108,16 @@ jobs:
         run: dotnet tool run docfx docfx.json --warningsAsErrors
 
       - name: Validate generated API site
+        if: needs.preflight.outputs.source_present == 'true'
         shell: pwsh
         run: .\scripts\validate-api-output.ps1
+
+      - name: Restore WorldgenLib landing page
+        if: needs.preflight.outputs.source_present == 'true'
+        shell: pwsh
+        run: |
+          Copy-Item -LiteralPath docs\site\index.html -Destination _site\index.html -Force
+          Copy-Item -LiteralPath docs\site\worldgenlib.css -Destination _site\worldgenlib.css -Force
 
       - name: Configure GitHub Pages
         id: pages

@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="WorldgenLib is a server-side API for Vintage Story modders to compose compatible world generation.">
+  <meta name="theme-color" content="#10231d">
+  <meta property="og:title" content="WorldgenLib | Worldgen interop for Vintage Story">
+  <meta property="og:description" content="A server-side C# API for composing compatible world-generation mods through ordered hook points.">
+  <meta property="og:type" content="website">
+  <title>WorldgenLib | Worldgen interop for Vintage Story</title>
+  <link rel="stylesheet" href="worldgenlib.css">
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="./" aria-label="WorldgenLib home">
+        <span class="brand__mark" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </span>
+        <span class="brand__name">WorldgenLib</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="./api/index.html">API reference</a>
+        <a href="https://github.com/Zaldaryon/WorldgenLib/wiki">Wiki</a>
+        <a href="https://github.com/Zaldaryon/WorldgenLib">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="content" class="page-shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero__copy">
+        <p class="eyebrow">Vintage Story / worldgen interop</p>
+        <h1 id="hero-title">Compose world generation at its seams.</h1>
+        <p class="hero__lede">WorldgenLib is a server-side C# API for modders who need world-generation changes to share one contract instead of competing for the same vanilla pass.</p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="./api/index.html">Read the API <span aria-hidden="true">↗</span></a>
+          <a class="button button--quiet" href="https://github.com/Zaldaryon/WorldgenLib/wiki/Getting-Started">Start integrating</a>
+        </div>
+        <p class="hero__status"><span class="status-dot" aria-hidden="true"></span> Server-side dependency | clients do not need the library</p>
+      </div>
+
+      <div class="hero__diagram" aria-label="WorldgenLib connects map, terrain, and late world-generation passes">
+        <div class="diagram__topline"><span>WORLDGENLIB</span><span>SHARED CONTRACT</span></div>
+        <div class="diagram__field">
+          <span class="contour contour--one" aria-hidden="true"></span>
+          <span class="contour contour--two" aria-hidden="true"></span>
+          <span class="contour contour--three" aria-hidden="true"></span>
+          <div class="diagram__axis" aria-hidden="true"></div>
+          <div class="diagram__node diagram__node--map"><strong>MAP</strong><small>region stages</small></div>
+          <div class="diagram__node diagram__node--terrain"><strong>TERRAIN</strong><small>column seams</small></div>
+          <div class="diagram__node diagram__node--late"><strong>LATE PASSES</strong><small>layers + cleanup</small></div>
+        </div>
+        <div class="diagram__legend"><span><i class="legend-dot legend-dot--green"></i> ordered hooks</span><span><i class="legend-dot legend-dot--amber"></i> consumer-owned work</span></div>
+      </div>
+    </section>
+
+    <section class="meta-strip" aria-label="WorldgenLib details">
+      <dl class="meta-strip__list">
+        <div><dt>Type</dt><dd>API library</dd></div>
+        <div><dt>Side</dt><dd>Server</dd></div>
+        <div><dt>Target</dt><dd>Vintage Story 1.22.0 to 1.22.7</dd></div>
+        <div><dt>License</dt><dd>MIT</dd></div>
+      </dl>
+    </section>
+
+    <section class="notice" aria-label="Library notice">
+      <span class="notice__mark" aria-hidden="true">!</span>
+      <p><strong>WorldgenLib is infrastructure, not a terrain overhaul.</strong> It adds no blocks, items, biomes, or world shape by itself. A consumer mod chooses the hook points it needs and keeps ownership of its own algorithm.</p>
+    </section>
+
+    <section class="section" aria-labelledby="what-title">
+      <div class="section-heading">
+        <p class="eyebrow eyebrow--dark">A shared contract for worldgen authors</p>
+        <h2 id="what-title">One generation pipeline. Many compatible mods.</h2>
+        <p>Use the smallest seam that expresses the change. WorldgenLib orders registered hooks, carries the state needed by the current request, and reports the boundaries where a complete replacement would collide.</p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="feature-card">
+          <div class="feature-card__index">01</div>
+          <h3>Ordered map hooks</h3>
+          <p>Work at named region stages, wrap map generators, adjust padding, forward force requests, or finalize region data after the map chain completes.</p>
+          <a href="https://github.com/Zaldaryon/WorldgenLib/wiki/Map-Hooks">Map hooks <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="feature-card">
+          <div class="feature-card__index">02</div>
+          <h3>Terrain seams</h3>
+          <p>Change border preparation, octave construction, vertical distortion, water selection, voxel thresholds, post-placement columns, or terrain finalization.</p>
+          <a href="https://github.com/Zaldaryon/WorldgenLib/wiki/Terrain-Hooks">Terrain hooks <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="feature-card">
+          <div class="feature-card__index">03</div>
+          <h3>Explicit request state</h3>
+          <p>Use typed region, chunk, and column contexts with namespaced request data instead of copying private engine fields or sharing mutable parallel buffers.</p>
+          <a href="https://github.com/Zaldaryon/WorldgenLib/wiki/Contexts-and-State">Contexts and state <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="feature-card">
+          <div class="feature-card__index">04</div>
+          <h3>Late-pass adapters</h3>
+          <p>Keep post-process cleanup and BlockLayers work separate from terrain hooks, with scalar seams for small changes and terminal adapters for complete passes.</p>
+          <a href="https://github.com/Zaldaryon/WorldgenLib/wiki/BlockLayers-and-PostProcess">Late passes <span aria-hidden="true">→</span></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="pipeline-panel" aria-labelledby="pipeline-title">
+      <div class="pipeline-panel__intro">
+        <p class="eyebrow">The useful boundary</p>
+        <h2 id="pipeline-title">Register where the algorithm changes.</h2>
+        <p>Consumers can compose local effects without silently becoming the second owner of an entire vanilla generator. Equal orders remain stable, failures are isolated to the affected registration, and blocking takeovers are reported.</p>
+      </div>
+      <div class="pipeline-rail" role="list" aria-label="WorldgenLib generation stages">
+        <div class="pipeline-step" role="listitem"><span class="pipeline-step__number">A</span><strong>MAPS</strong><small>region data</small></div>
+        <span class="pipeline-connector" aria-hidden="true"></span>
+        <div class="pipeline-step" role="listitem"><span class="pipeline-step__number">B</span><strong>TERRAIN</strong><small>columns + voxels</small></div>
+        <span class="pipeline-connector" aria-hidden="true"></span>
+        <div class="pipeline-step" role="listitem"><span class="pipeline-step__number">C</span><strong>LAYERS</strong><small>raise + filter</small></div>
+        <span class="pipeline-connector" aria-hidden="true"></span>
+        <div class="pipeline-step" role="listitem"><span class="pipeline-step__number">D</span><strong>FINALIZE</strong><small>post-process</small></div>
+      </div>
+    </section>
+
+    <section class="split-section" aria-label="Compatibility and installation">
+      <article class="paper-card">
+        <p class="eyebrow eyebrow--dark">Compatibility</p>
+        <h2>Know what the library promises.</h2>
+        <p>WorldgenLib has server lifecycle evidence across Vintage Story 1.22.0 through 1.22.7. Its canonical parity checks cover the documented map-region and terrain probe boundaries.</p>
+        <p class="muted">That evidence does not claim byte-identical persisted saves, entity state, lighting, or every foreign Harmony or IL patch. Read the limits before pairing it with a full worldgen replacement.</p>
+        <a class="text-link" href="https://github.com/Zaldaryon/WorldgenLib/wiki/Status-and-Limits">Read status and limits <span aria-hidden="true">→</span></a>
+      </article>
+      <article class="paper-card paper-card--dark">
+        <p class="eyebrow">Install path</p>
+        <h2>For server owners and modders.</h2>
+        <ol class="steps-list">
+          <li><span>1</span><p>Place the WorldgenLib release ZIP in the server <code>Mods</code> folder.</p></li>
+          <li><span>2</span><p>Install a consumer mod that declares the library as a server dependency.</p></li>
+          <li><span>3</span><p>Read that mod's hook and version instructions before generating a world.</p></li>
+        </ol>
+        <a class="text-link text-link--light" href="https://github.com/Zaldaryon/WorldgenLib/wiki/Getting-Started">Open the getting started guide <span aria-hidden="true">→</span></a>
+      </article>
+    </section>
+
+    <section class="cta-panel" aria-labelledby="cta-title">
+      <div>
+        <p class="eyebrow">Build on the seam</p>
+        <h2 id="cta-title">Give your worldgen mod a place in the shared pipeline.</h2>
+      </div>
+      <div class="cta-panel__actions">
+        <a class="button button--primary" href="./api/index.html">Open API reference <span aria-hidden="true">↗</span></a>
+        <a class="button button--outline" href="https://github.com/Zaldaryon/WorldgenLib">View source and releases</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span class="footer-brand"><span class="brand__mark brand__mark--small" aria-hidden="true"><span></span><span></span><span></span></span> WorldgenLib</span>
+      <span>MIT licensed | server-side API for Vintage Story</span>
+      <span><a href="https://ko-fi.com/zaldaryon">Support the author</a> <span aria-hidden="true">·</span> <a href="https://github.com/Zaldaryon/WorldgenLib/issues">Issues</a></span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -20,8 +20,8 @@ if ($metadataFiles.Count -eq 0) {
     throw 'DocFX produced no API metadata. Check that the public WorldgenLib source is available.'
 }
 
-if (-not (Test-Path -LiteralPath (Join-Path $sitePath 'index.html') -PathType Leaf)) {
-    throw "DocFX site entry point was not created: $(Join-Path $sitePath 'index.html')"
+if (-not (Test-Path -LiteralPath (Join-Path $sitePath 'api/index.html') -PathType Leaf)) {
+    throw "DocFX API entry point was not created: $(Join-Path $sitePath 'api/index.html')"
 }
 
 $apiSitePath = Join-Path $sitePath 'api'

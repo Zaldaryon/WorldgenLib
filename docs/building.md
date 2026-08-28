@@ -35,4 +35,4 @@ The `VINTAGE_STORY` environment variable points the project at the extracted off
 
 ## Validation
 
-For a release tag, the workflow runs [`validate-release.ps1`](../scripts/validate-release.ps1) before bootstrapping the game references. The API documentation workflow runs DocFX after the same reference bootstrap and publishes the generated `_site` directory to GitHub Pages. The package script verifies that the archive contains only the intended mod files and writes a SHA-256 checksum next to the ZIP.
+For a release tag, the workflow runs [`validate-release.ps1`](../scripts/validate-release.ps1) before bootstrapping the game references. The API documentation workflow always publishes the WorldgenLib landing page. When the source tree is public, it also runs DocFX after the same reference bootstrap and publishes the generated API pages under `_site/api`. The package script verifies that the archive contains only the intended mod files and writes a SHA-256 checksum next to the ZIP.
