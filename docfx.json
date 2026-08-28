@@ -20,6 +20,10 @@
     }
   ],
   "build": {
+    "template": [
+      "default",
+      "modern"
+    ],
     "content": [
       {
         "src": "docs/api",
@@ -48,6 +52,7 @@
     ],
     "globalMetadata": {
       "_appTitle": "WorldgenLib API Reference",
+      "_appName": "WorldgenLib",
       "_appFooter": "WorldgenLib",
       "_enableSearch": "true",
       "_gitUrlPattern": "github"
