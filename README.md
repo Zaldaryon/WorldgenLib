@@ -1,40 +1,44 @@
 # WorldgenLib
 
+[![Latest release](https://img.shields.io/github/v/release/Zaldaryon/WorldgenLib?sort=semver)](https://github.com/Zaldaryon/WorldgenLib/releases)
+[![API reference](https://img.shields.io/badge/API-reference-356b46)](https://zaldaryon.github.io/WorldgenLib/api/)
+[![License](https://img.shields.io/github/license/Zaldaryon/WorldgenLib)](LICENSE)
+
 WorldgenLib is a server-side API library for Vintage Story world-generation mods. It gives modders ordered hook points for terrain and map work so separate mods can compose their changes through a shared interface.
 
-## Project status
+## 0.1.0
 
-This repository currently contains the public build and release scaffolding. The WorldgenLib source is intentionally not published in this initial repository setup. The release workflow will stop with a clear validation error until the source and its tests are published.
+The first public release is available from [GitHub Releases](https://github.com/Zaldaryon/WorldgenLib/releases/tag/v0.1.0). It publishes the WorldgenLib API, its unit tests, the server-only mod metadata, and the mod icon.
+
+WorldgenLib is infrastructure, not a terrain overhaul. It does not replace `GenTerra` or `GenMaps`, and it does not add blocks, items, biomes, or world shape by itself.
 
 ## What it provides
 
 - An API for world-generation integrations instead of a competing world generator.
-- Ordered hook points for map, terrain, and post-processing work.
+- Ordered hook points for map, terrain, post-processing, and BlockLayers work.
 - Cooperative composition for multiple world-generation mods.
 - Diagnostics for incompatible takeover or patching strategies.
 - A server-side mod package. Clients do not need to install the library itself.
 
-WorldgenLib is additive. It does not ship a hard replacement for Vintage Story's `GenTerra` or `GenMaps` pipeline.
-
 ## Installation
 
-When a release is available, download its `WorldgenLib-<version>.zip` asset and place it in the server's `Mods` directory. The SHA-256 file published beside the archive can be used to verify the download.
+Download [`WorldgenLib-0.1.0.zip`](https://github.com/Zaldaryon/WorldgenLib/releases/download/v0.1.0/WorldgenLib-0.1.0.zip) from the release and place it in the server's `Mods` directory. The SHA-256 file published beside the archive can be used to verify the download.
 
-Mods that use WorldgenLib may list it as a server dependency. Follow each consumer mod's installation instructions for its own client and server needs.
+WorldgenLib is server-side only. Clients do not need to install it. Mods that use WorldgenLib may list it as a server dependency, so follow each consumer mod's installation instructions for its own client and server needs.
 
 ## Compatibility
 
-The build manifest pins the official Vintage Story build used to compile and test the library. The current pin is 1.22.7. Each release should document its tested Vintage Story versions and consumer-mod compatibility separately.
+WorldgenLib 0.1.0 is built and tested against Vintage Story 1.22.0 through 1.22.7. The reproducible release build uses the official 1.22.7 archive as its pinned reference input. See the [compatibility and updates](https://github.com/Zaldaryon/WorldgenLib/wiki/Compatibility-and-Updates) page for the evidence and current limits.
 
 ## API reference
 
-The [WorldgenLib site](https://zaldaryon.github.io/WorldgenLib/) is the public landing page. Its generated [C# API reference](https://zaldaryon.github.io/WorldgenLib/api/index.html) is built from `main` when the source tree is available. The [WorldgenLib Wiki](https://github.com/Zaldaryon/WorldgenLib/wiki) remains the place for conceptual guides and migration notes.
+The [WorldgenLib site](https://zaldaryon.github.io/WorldgenLib/) is the public landing page. Its generated [C# API reference](https://zaldaryon.github.io/WorldgenLib/api/index.html) is built by DocFX from the public source tree. The [WorldgenLib Wiki](https://github.com/Zaldaryon/WorldgenLib/wiki) remains the place for conceptual guides, migration notes, and compatibility limits.
 
 ## Development
 
 The build obtains reference assemblies from the official Vintage Story Windows installer at build time. The installer and extracted game files are build inputs only and are never included in a WorldgenLib release archive.
 
-After the source tree is published, see [Building](docs/building.md) for local build and test commands. Release maintainers should also read [Releasing](docs/releasing.md).
+See [Building](docs/building.md) for local build and test commands. Release maintainers should also read [Releasing](docs/releasing.md).
 
 ## Contributing
 

@@ -1,0 +1,32 @@
+<Project>
+
+  <!--
+    Vintage Story API reference resolution.
+
+    Set the VINTAGE_STORY environment variable to the extracted official game
+    installation. The public repository does not include game assemblies.
+  -->
+  <PropertyGroup>
+    <VintageStoryPath Condition="'$(VINTAGE_STORY)' != ''">$(VINTAGE_STORY)</VintageStoryPath>
+  </PropertyGroup>
+
+  <Target Name="ValidateVintageStoryPath" BeforeTargets="ResolveReferences"
+          Condition="'$(VintageStoryPath)' == '' Or !Exists('$(VintageStoryPath)')">
+    <Error Text="Set VINTAGE_STORY to an extracted official Vintage Story installation before building WorldgenLib." />
+  </Target>
+
+  <!-- Rewrite HintPaths to use the resolved VintageStoryPath -->
+  <PropertyGroup>
+    <VintageStoryApiDll>$(VintageStoryPath)/VintagestoryAPI.dll</VintageStoryApiDll>
+    <VintageStoryEssentialsDll>$(VintageStoryPath)/Mods/VSEssentials.dll</VintageStoryEssentialsDll>
+    <VintageStorySurvivalDll>$(VintageStoryPath)/Mods/VSSurvivalMod.dll</VintageStorySurvivalDll>
+    <VintageStoryLibDll>$(VintageStoryPath)/VintagestoryLib.dll</VintageStoryLibDll>
+    <VintageStoryHarmonyDll>$(VintageStoryPath)/Lib/0Harmony.dll</VintageStoryHarmonyDll>
+    <VintageStoryJsonDll>$(VintageStoryPath)/Lib/Newtonsoft.Json.dll</VintageStoryJsonDll>
+    <VintageStoryProtobufDll>$(VintageStoryPath)/Lib/protobuf-net.dll</VintageStoryProtobufDll>
+    <VintageStoryOpenTKDll>$(VintageStoryPath)/Lib/OpenTK.Mathematics.dll</VintageStoryOpenTKDll>
+    <VintageStorySqliteDll>$(VintageStoryPath)/Lib/Microsoft.Data.Sqlite.dll</VintageStorySqliteDll>
+    <VintageStorySkiaSharpDll>$(VintageStoryPath)/Lib/SkiaSharp.dll</VintageStorySkiaSharpDll>
+  </PropertyGroup>
+
+</Project>

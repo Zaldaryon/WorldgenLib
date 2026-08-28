@@ -1,6 +1,6 @@
 # Releasing WorldgenLib
 
-Releases are created only from Git tags. A normal branch or commit push does not publish a GitHub release.
+Releases are created only from Git tags. A normal branch or commit push does not publish a GitHub release. The first public release is `0.1.0`.
 
 ## Before tagging
 
@@ -33,7 +33,7 @@ Pushing a matching `v*.*.*` tag starts `.github/workflows/release.yml` on `windo
 5. Create the mod ZIP and SHA-256 checksum.
 6. Create the GitHub release with generated notes and both assets.
 
-The public site and API documentation are built by `.github/workflows/api-docs.yml` from `main`. GitHub Pages must use `GitHub Actions` as its source for that workflow, not branch publishing. The landing page is available while source publication is pending; the generated API reference appears under `/api/` once the source is on `main`.
+The public site and API documentation are built by `.github/workflows/api-docs.yml` from `main`. GitHub Pages must use `GitHub Actions` as its source for that workflow, not branch publishing. A source push automatically starts the workflow. It can also be started from the Actions tab with `Run workflow` when a rebuild is needed.
 
 Do not retag a published version. If a release needs correction, increment the version and publish a new tag.
 
@@ -41,4 +41,4 @@ Do not retag a published version. If a release needs correction, increment the v
 
 The workflow uses the official Vintage Story installer only as a build input. It does not upload the installer or game DLLs. The release job has the minimum repository permission it needs to create a GitHub release: `contents: write`.
 
-If a tag is pushed before the source tree is published, the metadata preflight fails before packaging. No release is created in that state.
+The release workflow validates the tag, metadata, source tree, and package contents before creating the GitHub release. A failure leaves the tag in place but does not create a release, so fix the branch and publish a new version rather than retagging.

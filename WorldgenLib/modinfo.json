@@ -1,0 +1,17 @@
+{
+    "$schema": "https://moddbcdn.vintagestory.at/schema/modinfo.latest.json",
+    "type": "Code",
+    "modid": "worldgenlib",
+    "name": "WorldgenLib",
+    "authors": [
+        "Zaldaryon"
+    ],
+    "description": "Shared server-side API for Vintage Story modders.",
+    "version": "0.1.0",
+    "dependencies": {
+        "game": "1.22.0"
+    },
+    "side": "Server",
+    "requiredOnClient": false,
+    "requiredOnServer": true
+}

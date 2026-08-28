@@ -1,6 +1,6 @@
 # Building WorldgenLib
 
-These instructions describe the build inputs and commands for the first public source release. The current repository setup does not contain the WorldgenLib source tree yet, so the build commands will fail with the same intentional preflight message as the release workflow until that source is published.
+These instructions describe the build inputs and commands for the public WorldgenLib source tree.
 
 ## Requirements
 
@@ -35,4 +35,6 @@ The `VINTAGE_STORY` environment variable points the project at the extracted off
 
 ## Validation
 
-For a release tag, the workflow runs [`validate-release.ps1`](../scripts/validate-release.ps1) before bootstrapping the game references. The API documentation workflow always publishes the WorldgenLib landing page. When the source tree is public, it also runs DocFX after the same reference bootstrap and publishes the generated API pages under `_site/api`. The package script verifies that the archive contains only the intended mod files and writes a SHA-256 checksum next to the ZIP.
+For a release tag, the workflow runs [`validate-release.ps1`](../scripts/validate-release.ps1) before bootstrapping the game references. The API documentation workflow runs DocFX after the same reference bootstrap and publishes the generated API pages under `_site/api`. The package script verifies that the archive contains only the intended mod files and writes a SHA-256 checksum next to the ZIP.
+
+The public source tree requires `VINTAGE_STORY`; it does not contain or reference a private checkout of the Vintage Story assemblies.

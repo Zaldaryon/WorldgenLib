@@ -1,11 +1,16 @@
 # Changelog
 
-## Unreleased
+## [Unreleased]
 
-- Added public build and release scaffolding.
-- Added tag-driven GitHub release automation.
-- Added DocFX and GitHub Pages API documentation scaffolding.
-- Added an original WorldgenLib landing page for the GitHub Pages site.
-- Added documentation for building, releasing, and contributing.
+No unreleased changes.
 
-The WorldgenLib source is not included in this repository state yet.
+## [0.1.0] - 2026-08-28
+
+- Published the initial WorldgenLib server-side API for Vintage Story world-generation mods.
+- Added ordered map, terrain, post-processing, and BlockLayers hook points.
+- Added typed request contexts, deterministic ordering, lifecycle validation, and conflict diagnostics.
+- Added the server-only mod package with metadata, icon, and SHA-256 release verification.
+- Added the generated DocFX API reference and the WorldgenLib GitHub Pages site.
+- Added reproducible build inputs and tag-driven GitHub release automation.
+
+[0.1.0]: https://github.com/Zaldaryon/WorldgenLib/releases/tag/v0.1.0
