@@ -1,0 +1,125 @@
+name: API documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.config/dotnet-tools.json'
+      - '.github/workflows/api-docs.yml'
+      - 'WorldgenLib/**'
+      - 'build-manifest.json'
+      - 'docfx-filter.yml'
+      - 'docfx.json'
+      - 'docs/api/**'
+      - 'scripts/bootstrap-vintage-story.ps1'
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    name: Check for public source
+    runs-on: ubuntu-latest
+    outputs:
+      source_present: ${{ steps.source.outputs.present }}
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v4
+
+      - name: Check source publication state
+        id: source
+        shell: bash
+        run: |
+          if [[ -f WorldgenLib/WorldgenLib.VintageStory.csproj && -f WorldgenLib/modinfo.json && -f WorldgenLib/src/WorldgenLibAPI.cs ]]; then
+            echo 'present=true' >> "$GITHUB_OUTPUT"
+            echo 'WorldgenLib source is available.'
+          else
+            echo 'present=false' >> "$GITHUB_OUTPUT"
+            echo 'WorldgenLib source is not public yet. API deployment is waiting for source publication.' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+  build:
+    name: Build API reference
+    needs: preflight
+    if: needs.preflight.outputs.source_present == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      pages: write
+    steps:
+      - name: Check out the source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET SDKs
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            10.0.x
+
+      - name: Restore DocFX
+        shell: pwsh
+        run: dotnet tool restore
+
+      - name: Cache official Vintage Story archive
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}\worldgenlib-vs-archives
+          key: worldgenlib-vs-windows-${{ hashFiles('build-manifest.json') }}
+
+      - name: Bootstrap official Vintage Story references
+        shell: pwsh
+        run: |
+          $manifest = Get-Content -LiteralPath build-manifest.json -Raw | ConvertFrom-Json
+          $vsRoot = Join-Path $env:RUNNER_TEMP "worldgenlib-vintagestory-$($manifest.vintageStoryVersion)"
+          .\scripts\bootstrap-vintage-story.ps1 -InstallPath $vsRoot
+          "VINTAGE_STORY=$vsRoot" >> $env:GITHUB_ENV
+
+      - name: Build WorldgenLib
+        shell: pwsh
+        run: dotnet build WorldgenLib\WorldgenLib.VintageStory.csproj -c Release --nologo
+
+      - name: Generate API site
+        shell: pwsh
+        env:
+          DOCFX_SOURCE_REPOSITORY_URL: https://github.com/Zaldaryon/WorldgenLib
+          DOCFX_SOURCE_BRANCH_NAME: main
+        run: dotnet tool run docfx docfx.json --warningsAsErrors
+
+      - name: Validate generated API site
+        shell: pwsh
+        run: .\scripts\validate-api-output.ps1
+
+      - name: Configure GitHub Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy:
+    name: Deploy API reference
+    needs: build
+    if: needs.build.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

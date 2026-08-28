@@ -1,0 +1,10 @@
+apiRules:
+- exclude:
+    uidRegex: ^WorldgenLib\.GenTerraBlocker$
+    type: Class
+- exclude:
+    uidRegex: ^WorldgenLib\.GenMapsBlocker$
+    type: Class
+- exclude:
+    uidRegex: ^WorldgenLib\.GenBlockLayersBridge$
+    type: Class

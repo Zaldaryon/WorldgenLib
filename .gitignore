@@ -5,6 +5,12 @@
 # Release artifacts
 /dist/
 
+# DocFX output
+/_site/
+/_api/
+/.docfx/
+/.playwright/
+
 # Local Vintage Story bootstrap files
 /.vanilla/
 /.tools/

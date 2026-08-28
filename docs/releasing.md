@@ -33,6 +33,8 @@ Pushing a matching `v*.*.*` tag starts `.github/workflows/release.yml` on `windo
 5. Create the mod ZIP and SHA-256 checksum.
 6. Create the GitHub release with generated notes and both assets.
 
+API documentation is built by `.github/workflows/api-docs.yml` from `main`. GitHub Pages must use `GitHub Actions` as its source for that workflow, not branch publishing. The generated site is the current API reference for the source on `main`.
+
 Do not retag a published version. If a release needs correction, increment the version and publish a new tag.
 
 ## Build inputs and permissions

@@ -25,6 +25,9 @@ $env:VINTAGE_STORY = $vsRoot
 
 dotnet build .\WorldgenLib\WorldgenLib.VintageStory.csproj -c Release --nologo
 dotnet test .\WorldgenLib.Tests\WorldgenLib.Tests.csproj -c Release --nologo
+dotnet tool restore
+dotnet tool run docfx docfx.json --warningsAsErrors
+pwsh .\scripts\validate-api-output.ps1
 pwsh .\scripts\package-mod.ps1 -Configuration Release -OutputDirectory .\dist
 ```
 
@@ -32,4 +35,4 @@ The `VINTAGE_STORY` environment variable points the project at the extracted off
 
 ## Validation
 
-For a release tag, the workflow runs [`validate-release.ps1`](../scripts/validate-release.ps1) before bootstrapping the game references. The package script verifies that the archive contains only the intended mod files and writes a SHA-256 checksum next to the ZIP.
+For a release tag, the workflow runs [`validate-release.ps1`](../scripts/validate-release.ps1) before bootstrapping the game references. The API documentation workflow runs DocFX after the same reference bootstrap and publishes the generated `_site` directory to GitHub Pages. The package script verifies that the archive contains only the intended mod files and writes a SHA-256 checksum next to the ZIP.

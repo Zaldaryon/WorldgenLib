@@ -26,6 +26,10 @@ Mods that use WorldgenLib may list it as a server dependency. Follow each consum
 
 The build manifest pins the official Vintage Story build used to compile and test the library. The current pin is 1.22.7. Each release should document its tested Vintage Story versions and consumer-mod compatibility separately.
 
+## API reference
+
+The generated [C# API reference](https://zaldaryon.github.io/WorldgenLib/) will be published from `main` after the source tree is available. The [WorldgenLib Wiki](https://github.com/Zaldaryon/WorldgenLib/wiki) remains the place for conceptual guides and migration notes.
+
 ## Development
 
 The build obtains reference assemblies from the official Vintage Story Windows installer at build time. The installer and extracted game files are build inputs only and are never included in a WorldgenLib release archive.
