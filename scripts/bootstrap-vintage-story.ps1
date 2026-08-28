@@ -49,7 +49,10 @@ function Ensure-Directory([string]$Path) {
     }
 }
 
-function Download-Atomic([string]$Url, [string]$Destination) {
+function Download-Atomic(
+    [string]$Url,
+    [string]$Destination,
+    [long]$MinimumBytes = 1MB) {
     Ensure-Directory (Split-Path -Parent $Destination)
     $partial = "$Destination.partial"
     if (Test-Path -LiteralPath $partial) {
@@ -66,9 +69,9 @@ function Download-Atomic([string]$Url, [string]$Destination) {
         if (Test-Path -LiteralPath $partial) { Remove-Item -LiteralPath $partial -Force }
         throw "Download failed: $Url"
     }
-    if (-not (Test-Path -LiteralPath $partial -PathType Leaf) -or (Get-Item -LiteralPath $partial).Length -lt 1MB) {
+    if (-not (Test-Path -LiteralPath $partial -PathType Leaf) -or (Get-Item -LiteralPath $partial).Length -lt $MinimumBytes) {
         if (Test-Path -LiteralPath $partial) { Remove-Item -LiteralPath $partial -Force }
-        throw "Downloaded file is missing or unexpectedly small: $Url"
+        throw "Downloaded file is missing or unexpectedly small for the configured minimum of $MinimumBytes bytes: $Url"
     }
     Move-Item -LiteralPath $partial -Destination $Destination -Force
 }
@@ -85,7 +88,7 @@ $innounpPath = Join-Path $toolsRoot $archive.extractor.executable
 if (-not (Test-Path -LiteralPath $innounpPath -PathType Leaf)) {
     $extractorArchive = Join-Path $toolsRoot $archive.extractor.name
     Write-Host 'Downloading the pinned Inno Setup extractor'
-    Download-Atomic $archive.extractor.url $extractorArchive
+    Download-Atomic $archive.extractor.url $extractorArchive 64KB
     Ensure-Directory $toolsRoot
     Expand-Archive -LiteralPath $extractorArchive -DestinationPath $toolsRoot -Force
     $found = Get-ChildItem -LiteralPath $toolsRoot -Recurse -Filter $archive.extractor.executable -File |
